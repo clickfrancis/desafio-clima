@@ -1,14 +1,13 @@
 package temp.desafio.api.infrastructure.mappers;
 
 import org.springframework.stereotype.Component;
-import temp.desafio.api.core.dadosMetereologico.entities.DadosMetereologicos;
-import temp.desafio.api.infrastructure.persistence.DadosMetereologicosEntity;
+import temp.desafio.api.core.dadosMetereologico.dto.DadosMetereologicos;
+import temp.desafio.api.infrastructure.persistence.entity.DadosMetereologicosEntity;
 
 @Component
 public class DadosMetereologicosEntityMapper {
-    public DadosMetereologicosEntity toEntity(DadosMetereologicos dadosMetereologicos){
-        return new DadosMetereologicosEntity(
-                dadosMetereologicos.id(),
+    public DadosMetereologicosEntity toDadosMetereologicosEntity(DadosMetereologicos dadosMetereologicos){
+        return new DadosMetereologicosEntity(null,
                 dadosMetereologicos.cidade(),
                 dadosMetereologicos.data(),
                 dadosMetereologicos.tempMin(),
@@ -23,7 +22,6 @@ public class DadosMetereologicosEntityMapper {
 
     public DadosMetereologicos toDadosMetereologicos(DadosMetereologicosEntity dadosMetereologicosEntity){
         return new DadosMetereologicos(
-                dadosMetereologicosEntity.getId(),
                 dadosMetereologicosEntity.getCidade(),
                 dadosMetereologicosEntity.getData(),
                 dadosMetereologicosEntity.getTempMin(),

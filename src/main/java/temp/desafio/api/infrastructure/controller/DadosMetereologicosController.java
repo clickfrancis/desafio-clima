@@ -8,10 +8,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import temp.desafio.api.core.dadosMetereologico.entities.DadosMetereologicos;
+import temp.desafio.api.core.dadosMetereologico.dto.DadosMetereologicos;
 import temp.desafio.api.core.usecase.CreateDadosMetereologicosUseCase;
 import temp.desafio.api.infrastructure.dto.DadosMetereologicosDto;
-import temp.desafio.api.infrastructure.mappers.DadosMetereologicosDtoMapper;
 
 @RestController
 @RequestMapping("/dadosMetereologicos")

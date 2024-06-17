@@ -1,13 +1,14 @@
 package temp.desafio.api.infrastructure.service;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
-import temp.desafio.api.core.dadosMetereologico.entities.DadosMetereologicos;
+import temp.desafio.api.core.dadosMetereologico.dto.DadosMetereologicos;
 import temp.desafio.api.core.dadosMetereologico.repositories.IDadosMetereologicos;
 import temp.desafio.api.infrastructure.mappers.DadosMetereologicosEntityMapper;
-import temp.desafio.api.infrastructure.persistence.DadosMetereologicosEntity;
-import temp.desafio.api.infrastructure.persistence.DadosMetereologicosRepository;
+import temp.desafio.api.infrastructure.persistence.entity.DadosMetereologicosEntity;
+import temp.desafio.api.infrastructure.persistence.repositories.DadosMetereologicosRepository;
 
 import java.util.List;
 import java.util.Optional;
@@ -18,15 +19,15 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class DadosMetereologicosService implements IDadosMetereologicos {
 
+    @Autowired
     private final DadosMetereologicosRepository dadosMetereologicosRepository;
 
+    @Autowired
     private final DadosMetereologicosEntityMapper entityMapper;
-
-
 
     @Override
     public DadosMetereologicos createDadosMetereologicos(DadosMetereologicos dadosMetereologicos){
-        DadosMetereologicosEntity dadosMetereologicosEntity = entityMapper.toEntity(dadosMetereologicos);
+        DadosMetereologicosEntity dadosMetereologicosEntity = entityMapper.toDadosMetereologicosEntity(dadosMetereologicos);
         DadosMetereologicosEntity novoDadosMetereologicos = dadosMetereologicosRepository.save(dadosMetereologicosEntity);
         return entityMapper.toDadosMetereologicos(novoDadosMetereologicos);
     }
@@ -48,7 +49,7 @@ public class DadosMetereologicosService implements IDadosMetereologicos {
 
     @Override
     public void deleteDadosMeterologicos(DadosMetereologicos dadosMetereologicos) {
-        DadosMetereologicosEntity dadosMetereologicosEntity = entityMapper.toEntity(dadosMetereologicos);
+        DadosMetereologicosEntity dadosMetereologicosEntity = entityMapper.toDadosMetereologicosEntity(dadosMetereologicos);
         dadosMetereologicosRepository.delete(dadosMetereologicosEntity);
     }
 

@@ -1,6 +1,6 @@
 package temp.desafio.api.core.dadosMetereologico.repositories;
 
-import temp.desafio.api.core.dadosMetereologico.entities.DadosMetereologicos;
+import temp.desafio.api.core.dadosMetereologico.dto.DadosMetereologicos;
 
 import java.util.List;
 

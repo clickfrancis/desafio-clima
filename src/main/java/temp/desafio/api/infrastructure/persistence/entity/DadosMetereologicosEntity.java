@@ -1,4 +1,4 @@
-package temp.desafio.api.infrastructure.persistence;
+package temp.desafio.api.infrastructure.persistence.entity;
 
 
 import jakarta.persistence.*;

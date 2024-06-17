@@ -1,6 +1,6 @@
 package temp.desafio.api.core.usecase;
 
-import temp.desafio.api.core.dadosMetereologico.entities.DadosMetereologicos;
+import temp.desafio.api.core.dadosMetereologico.dto.DadosMetereologicos;
 import temp.desafio.api.core.dadosMetereologico.repositories.IDadosMetereologicos;
 
 public class UpdateDadosMetereologicosUseCaseImp implements UpdateDadosMetereologicosUseCase {
