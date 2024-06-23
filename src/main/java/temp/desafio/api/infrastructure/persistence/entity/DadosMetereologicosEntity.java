@@ -6,6 +6,8 @@ import lombok.*;
 import temp.desafio.api.core.enums.TipoClima;
 import temp.desafio.api.core.enums.TipoTurno;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.Date;
 
 @Entity(name = "DadosMetereologicos")
@@ -20,7 +22,7 @@ public class DadosMetereologicosEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     Long id;
     String cidade;
-    Date data;
+    LocalDate data;
     double tempMin;
     double tempMax;
 

@@ -1,18 +1,25 @@
 package temp.desafio.api.core.usecase;
 
+import lombok.AllArgsConstructor;
+import lombok.NoArgsConstructor;
+import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import temp.desafio.api.core.dadosMetereologico.dto.DadosMetereologicos;
 import temp.desafio.api.core.dadosMetereologico.repositories.IDadosMetereologicos;
+import temp.desafio.api.infrastructure.service.DadosMetereologicosService;
+
 
 public class CreateDadosMetereologicosUseCaseImp implements CreateDadosMetereologicosUseCase{
 
-    private final IDadosMetereologicos dadosMetereologicosGateway;
+    private final DadosMetereologicosService dadosMetereologicosService;
 
-    public CreateDadosMetereologicosUseCaseImp(IDadosMetereologicos dadosMetereologicosGateway) {
-        this.dadosMetereologicosGateway = dadosMetereologicosGateway;
+    public CreateDadosMetereologicosUseCaseImp(DadosMetereologicosService dadosMetereologicosService) {
+        this.dadosMetereologicosService = dadosMetereologicosService;
     }
+
 
     @Override
     public DadosMetereologicos execute(DadosMetereologicos dadosMetereologicos) {
-        return dadosMetereologicosGateway.createDadosMetereologicos(dadosMetereologicos);
+        return dadosMetereologicosService.createDadosMetereologicos(dadosMetereologicos);
     }
 }

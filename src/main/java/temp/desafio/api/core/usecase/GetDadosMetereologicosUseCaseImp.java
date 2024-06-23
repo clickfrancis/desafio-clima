@@ -2,26 +2,26 @@ package temp.desafio.api.core.usecase;
 
 import temp.desafio.api.core.dadosMetereologico.dto.DadosMetereologicos;
 import temp.desafio.api.core.dadosMetereologico.repositories.IDadosMetereologicos;
+import temp.desafio.api.infrastructure.service.DadosMetereologicosService;
 
 import java.util.List;
 
 public class GetDadosMetereologicosUseCaseImp implements GetDadosMetereologicosUseCase {
 
+    private final DadosMetereologicosService dadosMetereologicosService;
 
-    private final IDadosMetereologicos dadosMetereologicosGateway;
-
-    public GetDadosMetereologicosUseCaseImp(IDadosMetereologicos dadosMetereologicosGateway) {
-        this.dadosMetereologicosGateway = dadosMetereologicosGateway;
+    public GetDadosMetereologicosUseCaseImp(DadosMetereologicosService dadosMetereologicosService) {
+        this.dadosMetereologicosService = dadosMetereologicosService;
     }
 
     @Override
     public List<DadosMetereologicos> execute() {
-        return dadosMetereologicosGateway.getAllDadosMetereologicos();
+        return dadosMetereologicosService.getAllDadosMetereologicos();
     }
 
     @Override
     public DadosMetereologicos executeByCity(String cidade) {
-        return dadosMetereologicosGateway.findByCidade(cidade);
+        return dadosMetereologicosService.findByCidade(cidade);
     }
 
 

@@ -2,19 +2,24 @@ package temp.desafio.api.core.usecase;
 
 import temp.desafio.api.core.dadosMetereologico.dto.DadosMetereologicos;
 import temp.desafio.api.core.dadosMetereologico.repositories.IDadosMetereologicos;
+import temp.desafio.api.infrastructure.service.DadosMetereologicosService;
 
 public class DeleteDadosMetereologicosUseCaseImp implements DeleteDadosMetereologicosUseCase {
 
-    private final IDadosMetereologicos dadosMetereologicosGateway;
+    private final DadosMetereologicosService dadosMetereologicosService;
 
-    public DeleteDadosMetereologicosUseCaseImp(IDadosMetereologicos dadosMetereologicosGateway) {
-        this.dadosMetereologicosGateway = dadosMetereologicosGateway;
+    public DeleteDadosMetereologicosUseCaseImp (
+            DadosMetereologicosService dadosMetereologicosService
+    ) {
+        this.dadosMetereologicosService = dadosMetereologicosService;
     }
 
     @Override
-    public DadosMetereologicos execute(DadosMetereologicos dadosMetereologicos) {
-        dadosMetereologicosGateway.deleteDadosMeterologicos(dadosMetereologicos);
-        return dadosMetereologicos;
+    public void execute(DadosMetereologicos dadosMetereologicos) {
+        dadosMetereologicosService.deleteDadosMeterologicos(
+                dadosMetereologicos.cidade(),
+                dadosMetereologicos.data(),
+                dadosMetereologicos.turno()
+        );
     }
-
 }

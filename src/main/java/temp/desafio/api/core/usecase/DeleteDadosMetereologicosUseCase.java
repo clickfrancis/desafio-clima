@@ -4,5 +4,5 @@ import temp.desafio.api.core.dadosMetereologico.dto.DadosMetereologicos;
 
 public interface DeleteDadosMetereologicosUseCase {
 
-    DadosMetereologicos execute(DadosMetereologicos dadosMetereologicos);
+    void execute(DadosMetereologicos dadosMetereologicos);
 }
