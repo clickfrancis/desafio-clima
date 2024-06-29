@@ -5,10 +5,7 @@ import jakarta.persistence.*;
 import lombok.*;
 import temp.desafio.api.core.enums.TipoClima;
 import temp.desafio.api.core.enums.TipoTurno;
-
 import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.util.Date;
 
 @Entity(name = "DadosMetereologicos")
 @Table(name = "dados_metereologicos")
@@ -23,8 +20,8 @@ public class DadosMetereologicosEntity {
     Long id;
     String cidade;
     LocalDate data;
-    double tempMin;
-    double tempMax;
+    String tempMin;
+    String tempMax;
 
     @Enumerated(EnumType.STRING)
     TipoTurno turno;
@@ -32,7 +29,7 @@ public class DadosMetereologicosEntity {
     @Enumerated(EnumType.STRING)
     TipoClima clima;
 
-    double precipitacao;
-    double umidade;
-    double velDoVento;
+    String precipitacao;
+    String umidade;
+    String velDoVento;
 }

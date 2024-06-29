@@ -3,11 +3,11 @@ package temp.desafio.api.infrastructure.service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
-import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 import temp.desafio.api.core.dadosMetereologico.dto.DadosMetereologicos;
 import temp.desafio.api.core.dadosMetereologico.repositories.IDadosMetereologicos;
 import temp.desafio.api.core.enums.TipoTurno;
+import temp.desafio.api.core.usecase.CreateDadosMetereologicosUseCaseImp;
 import temp.desafio.api.infrastructure.mappers.DadosMetereologicosEntityMapper;
 import temp.desafio.api.infrastructure.persistence.entity.DadosMetereologicosEntity;
 import temp.desafio.api.infrastructure.persistence.repositories.DadosMetereologicosRepository;
@@ -18,7 +18,6 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
-@Component
 @RequiredArgsConstructor
 public class DadosMetereologicosService implements IDadosMetereologicos {
 
@@ -28,8 +27,12 @@ public class DadosMetereologicosService implements IDadosMetereologicos {
     @Autowired
     private final DadosMetereologicosEntityMapper entityMapper;
 
+    @Autowired
+    private CreateDadosMetereologicosUseCaseImp createDadosMetereologicosUseCase;
+
     @Override
     public DadosMetereologicos createDadosMetereologicos(DadosMetereologicos dadosMetereologicos){
+        createDadosMetereologicosUseCase.execute(dadosMetereologicos);
         DadosMetereologicosEntity dadosMetereologicosEntity = entityMapper.toDadosMetereologicosEntity(dadosMetereologicos);
         DadosMetereologicosEntity dadosMetereologicosEntitySaveEntity = dadosMetereologicosRepository.save(dadosMetereologicosEntity);
         return entityMapper.toDadosMetereologicos(dadosMetereologicosEntitySaveEntity);

@@ -9,12 +9,12 @@ public record DadosMetereologicos(
         String cidade,
         @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy")
         LocalDate data,
-        double tempMin,
-        double tempMax,
+        String tempMin,
+        String tempMax,
         TipoTurno turno,
         TipoClima clima,
-        double precipitacao,
-        double umidade,
-        double velDoVento
+        String precipitacao,
+        String umidade,
+        String velDoVento
 ) {
 }
