@@ -39,13 +39,13 @@ public class DadosMetereologicosApi {
     }
 
     @PutMapping("/atualizar-dados-metereologicos/{cidade}/{data}/{turno}")
-    public ResponseEntity<Void> updateDadosMetereologicos(
+    public ResponseEntity<DadosMetereologicos> updateDadosMetereologicos(
             @PathVariable String cidade,
             @PathVariable @DateTimeFormat(pattern = "dd-MM-yyyy") LocalDate data,
             @PathVariable TipoTurno turno,
             @RequestBody DadosMetereologicos dadosMetereologicos) {
         dadosMetereologicosService.updateDadosMeterologicos(cidade, data, turno, dadosMetereologicos);
-        return ResponseEntity.noContent().build();
+        return ResponseEntity.status(HttpStatus.OK).body(dadosMetereologicos);
     }
 
     @DeleteMapping(path = "/{cidade}/{data}/{turno}")

@@ -1,8 +1,8 @@
-package temp.desafio.api.core.usecase;
+package temp.desafio.api.core.usecase.validadores;
 
 import temp.desafio.api.core.dadosMetereologico.dto.DadosMetereologicos;
 
-public interface Validacao {
+public interface ValidacaoUpdateDadosMetereologicos {
 
     void validar(DadosMetereologicos dados);
 }

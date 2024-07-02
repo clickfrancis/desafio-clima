@@ -1,4 +1,4 @@
-package temp.desafio.api.core.usecase;
+package temp.desafio.api.core.usecase.validadores;
 
 
 import org.springframework.stereotype.Component;
@@ -6,7 +6,7 @@ import temp.desafio.api.core.dadosMetereologico.dto.DadosMetereologicos;
 import temp.desafio.api.core.exceptions.ValidacaoException;
 
 @Component
-public class ValidadorDeCamposNulos implements Validacao{
+public class ValidadorDeCamposNulosCreateCase implements ValidacaoCreateDadosMetereologicos {
 
     @Override
     public void validar(DadosMetereologicos dados) {
@@ -18,7 +18,7 @@ public class ValidadorDeCamposNulos implements Validacao{
             dados.tempMin() == null ||
             dados.tempMax() == null
         ) {
-            throw new ValidacaoException("Campo não pode está vazio!");
+            throw new ValidacaoException("Campos obrigatorios não podem está vazios!");
         }
     }
 }

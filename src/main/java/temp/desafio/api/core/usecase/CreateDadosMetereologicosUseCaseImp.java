@@ -4,8 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import temp.desafio.api.core.dadosMetereologico.dto.DadosMetereologicos;
-import temp.desafio.api.core.dadosMetereologico.repositories.IDadosMetereologicos;
-import temp.desafio.api.infrastructure.service.DadosMetereologicosService;
+import temp.desafio.api.core.usecase.validadores.ValidacaoCreateDadosMetereologicos;
 
 import java.util.List;
 
@@ -14,11 +13,11 @@ import java.util.List;
 public class CreateDadosMetereologicosUseCaseImp implements CreateDadosMetereologicosUseCase{
 
     @Autowired
-    private final List<Validacao> validacoes;
+    private final List<ValidacaoCreateDadosMetereologicos> validacoes;
 
     @Override
     public DadosMetereologicos execute(DadosMetereologicos dadosMetereologicos) {
-        validacoes.forEach(validacao -> validacao.validar(dadosMetereologicos));
+        validacoes.forEach(validacaoCreateDadosMetereologicos -> validacaoCreateDadosMetereologicos.validar(dadosMetereologicos));
         return dadosMetereologicos;
     }
 }
