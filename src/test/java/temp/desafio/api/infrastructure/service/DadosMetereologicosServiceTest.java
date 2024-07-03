@@ -42,13 +42,13 @@ public class DadosMetereologicosServiceTest {
         dadosMetereologicos = new DadosMetereologicos(
                 "Salvador",
                 LocalDate.now(),
-                0.0,
-                0.0,
+                "0.0",
+                "0.0",
                 TipoTurno.MANHA,
                 null,
-                0.0,
-                0.0,
-                0.0
+                "0.0",
+                "0.0",
+                "0.0"
                 );
 
         dadosMetereologicosEntity = new DadosMetereologicosEntity();

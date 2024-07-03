@@ -15,6 +15,7 @@ import temp.desafio.api.infrastructure.service.DadosMetereologicosService;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 
@@ -34,27 +35,30 @@ public class DadosMetereologicosApi {
     }
 
     @GetMapping
-    public List<DadosMetereologicos> getAllDadosMetereologicos(){
-        return dadosMetereologicosService.getAllDadosMetereologicos();
+    public ResponseEntity<List<DadosMetereologicos>> getAllDadosMetereologicos(){
+        List<DadosMetereologicos> dadosMetereologicos = dadosMetereologicosService.getAllDadosMetereologicos();
+        return ResponseEntity.status(HttpStatus.OK).body(dadosMetereologicos);
     }
 
     @PutMapping("/atualizar-dados-metereologicos/{cidade}/{data}/{turno}")
     public ResponseEntity<DadosMetereologicos> updateDadosMetereologicos(
             @PathVariable String cidade,
-            @PathVariable @DateTimeFormat(pattern = "dd-MM-yyyy") LocalDate data,
+            @PathVariable @DateTimeFormat(pattern = "d-M-yyyy") String data,
             @PathVariable TipoTurno turno,
             @RequestBody DadosMetereologicos dadosMetereologicos) {
-        dadosMetereologicosService.updateDadosMeterologicos(cidade, data, turno, dadosMetereologicos);
+        LocalDate localDate = LocalDate.parse(data, DateTimeFormatter.ofPattern("d-M-yyyy"));
+        dadosMetereologicosService.updateDadosMeterologicos(cidade, localDate, turno, dadosMetereologicos);
         return ResponseEntity.status(HttpStatus.OK).body(dadosMetereologicos);
     }
 
     @DeleteMapping(path = "/{cidade}/{data}/{turno}")
-    public ResponseEntity<Void> delete(
+    public ResponseEntity<HttpStatus> delete(
             @PathVariable String cidade,
-            @PathVariable @DateTimeFormat(pattern = "dd-MM-yyyy") LocalDate data,
+            @PathVariable @DateTimeFormat(pattern = "d-M-yyyy") String data,
             @PathVariable TipoTurno turno
     ) {
-        dadosMetereologicosService.deleteDadosMeterologicos(cidade, data, turno);
-        return ResponseEntity.noContent().build();
+        LocalDate localDate = LocalDate.parse(data, DateTimeFormatter.ofPattern("d-M-yyyy"));
+        dadosMetereologicosService.deleteDadosMeterologicos(cidade, localDate , turno);
+        return ResponseEntity.status(HttpStatus.ACCEPTED).build();
     }
 }
