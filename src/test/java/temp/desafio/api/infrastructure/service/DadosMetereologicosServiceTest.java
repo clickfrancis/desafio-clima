@@ -86,6 +86,19 @@ public class DadosMetereologicosServiceTest {
     }
 
     @Test
+    public void deveEncontrarTodosOsDadosMetereologicosComSucesso() {
+        when(dadosMetereologicosRepository.findAll()).thenReturn(Collections.singletonList(dadosMetereologicosEntity));
+        when(entityMapper.toDadosMetereologicos(dadosMetereologicosEntity)).thenReturn(dadosMetereologicos);
+
+        List<DadosMetereologicos> result = dadosMetereologicosService.getAllDadosMetereologicos();
+
+        assertNotNull(result);
+
+        verify(dadosMetereologicosRepository).findAll();
+        verify(entityMapper).toDadosMetereologicos(dadosMetereologicosEntity);
+    }
+
+    @Test
     public void deveAtualizarDadosMetereologicosComSucesso() {
 
         when(dadosMetereologicosRepository.findByCidadeAndDataAndTurno(
@@ -130,18 +143,5 @@ public class DadosMetereologicosServiceTest {
                 dadosMetereologicos.turno());
         verify(dadosMetereologicosRepository, never()).save(any(DadosMetereologicosEntity.class));
         verify(entityMapper, never()).toDadosMetereologicos(any(DadosMetereologicosEntity.class));
-    }
-
-    @Test
-    public void deveEncontrarTodosOsDadosMetereologicosComSucesso() {
-        when(dadosMetereologicosRepository.findAll()).thenReturn(Collections.singletonList(dadosMetereologicosEntity));
-        when(entityMapper.toDadosMetereologicos(dadosMetereologicosEntity)).thenReturn(dadosMetereologicos);
-
-        List<DadosMetereologicos> result = dadosMetereologicosService.getAllDadosMetereologicos();
-
-        assertNotNull(result);
-
-        verify(dadosMetereologicosRepository).findAll();
-        verify(entityMapper).toDadosMetereologicos(dadosMetereologicosEntity);
     }
 }
