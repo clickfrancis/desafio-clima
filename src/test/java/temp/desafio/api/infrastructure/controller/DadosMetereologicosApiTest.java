@@ -13,6 +13,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
+import temp.desafio.api.ApiPath;
 import temp.desafio.api.core.dadosMetereologico.dto.DadosMetereologicosDTO;
 import temp.desafio.api.core.enums.TipoClima;
 import temp.desafio.api.core.enums.TipoTurno;
@@ -80,7 +81,7 @@ public class DadosMetereologicosApiTest {
                 )
         );
 
-        mockMvc.perform(MockMvcRequestBuilders.post("/dados-metereologicos")
+        mockMvc.perform(MockMvcRequestBuilders.post(ApiPath.BASE_PATH)
                         .contentType(MediaType.APPLICATION_JSON)
                         .characterEncoding("UTF-8")
                         .content(dadosMetereologicosRequest))
@@ -106,7 +107,7 @@ public class DadosMetereologicosApiTest {
                 )
         );
 
-        mockMvc.perform(MockMvcRequestBuilders.post("/dados-metereologicos")
+        mockMvc.perform(MockMvcRequestBuilders.post(ApiPath.BASE_PATH)
                         .contentType(MediaType.APPLICATION_JSON)
                         .characterEncoding("UTF-8")
                         .accept(MediaType.APPLICATION_JSON)
@@ -143,7 +144,7 @@ public class DadosMetereologicosApiTest {
         );
 
         mockMvc.perform(MockMvcRequestBuilders.put(
-                "/dados-metereologicos/atualizar-dados-metereologicos/{cidade}/{data}/{turno}", "Salvador", "2-7-2024","MANHA")
+                ApiPath.BASE_PATH, "Salvador", "2-7-2024","MANHA")
                 .content(dadosMetereologicosRequest)
                 .characterEncoding("UTF-8")
                 .contentType(MediaType.APPLICATION_JSON)
@@ -160,7 +161,7 @@ public class DadosMetereologicosApiTest {
     @DisplayName("Deveria devolver status 202 quando solicitar requisição de deletar")
     public void deleteEmployeeAPI() throws Exception
     {
-        mockMvc.perform( MockMvcRequestBuilders.delete("/dados-metereologicos/{cidade}/{data}/{turno}", "Salvador", "2-7-2024","MANHA") )
+        mockMvc.perform( MockMvcRequestBuilders.delete(ApiPath.BASE_PATH + ApiPath.PATH_DELETE, "Salvador", "2-7-2024","MANHA") )
                 .andExpect(MockMvcResultMatchers.status().isAccepted());
     }
 }
