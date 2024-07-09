@@ -36,12 +36,8 @@ public class DadosMetereologicosApi {
     @PutMapping
     @Transactional
     public ResponseEntity<DadosMetereologicosDTO> updateDadosMetereologicos(
-            @PathVariable String cidade,
-            @PathVariable @DateTimeFormat(pattern = "d-M-yyyy") String data,
-            @PathVariable TipoTurno turno,
             @RequestBody DadosMetereologicosDTO dadosMetereologicosDTO) {
-        LocalDate localDate = LocalDate.parse(data, DateTimeFormatter.ofPattern("d-M-yyyy"));
-        dadosMetereologicosService.updateDadosMeterologicos(cidade, localDate, turno, dadosMetereologicosDTO);
+        dadosMetereologicosService.updateDadosMeterologicos(dadosMetereologicosDTO);
         return ResponseEntity.status(HttpStatus.OK).body(dadosMetereologicosDTO);
     }
 

@@ -21,5 +21,13 @@ public class ValidadorDeCamposNulosUpdateCase implements ValidacaoUpdateDadosMet
         ) {
             throw new ValidacaoException("Não há atualização para fazer, pois nenhum campo foi preenchido!");
         }
+
+        if (
+            dados.cidade() == null ||
+            dados.data() == null ||
+            dados.turno() == null
+        ) {
+            throw new ValidacaoException("Campos cidade, data e turno precisam ser informados.");
+        }
     }
 }

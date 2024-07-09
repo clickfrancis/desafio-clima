@@ -72,17 +72,19 @@ public class DadosMetereologicosService implements IDadosMetereologicos {
     }
 
     @Override
-    public DadosMetereologicosDTO updateDadosMeterologicos(
-            String cidade,
-            LocalDate data,
-            TipoTurno turno,
-            DadosMetereologicosDTO dadosMetereologicosDTO) {
+    public DadosMetereologicosDTO updateDadosMeterologicos(DadosMetereologicosDTO dadosMetereologicosDTO) {
 
-            Optional<DadosMetereologicos> dadosMetereologicosEntity = dadosMetereologicosRepository.findByCidadeAndDataAndTurno(cidade,data,turno);
+        updateDadosMetereologicosUseCaseImp.execute(dadosMetereologicosDTO);
 
-            updateDadosMetereologicosUseCaseImp.execute(dadosMetereologicosDTO);
+        Optional<DadosMetereologicos> dadosMetereologicosEntity =
+                dadosMetereologicosRepository.findByCidadeAndDataAndTurno(
+                    dadosMetereologicosDTO.cidade(),
+                    dadosMetereologicosDTO.data(),
+                    dadosMetereologicosDTO.turno()
+                );
 
-            if (dadosMetereologicosEntity.isPresent()) {
+        if (dadosMetereologicosEntity.isPresent()) {
+
                 DadosMetereologicos existingDadosMetereologicos = dadosMetereologicosEntity.get();
 
                 String cidadeUpdate = dadosMetereologicosDTO.cidade() == null ? existingDadosMetereologicos.getCidade() : dadosMetereologicosDTO.cidade();
@@ -94,17 +96,6 @@ public class DadosMetereologicosService implements IDadosMetereologicos {
                 String precipitacaoUpdate = dadosMetereologicosDTO.precipitacao() == null ? existingDadosMetereologicos.getPrecipitacao() : dadosMetereologicosDTO.precipitacao();
                 String umidadeUpdate = dadosMetereologicosDTO.umidade() == null ? existingDadosMetereologicos.getUmidade() : dadosMetereologicosDTO.umidade();
                 String velDoVentoUpdate = dadosMetereologicosDTO.velDoVento() == null ? existingDadosMetereologicos.getVelDoVento() : dadosMetereologicosDTO.velDoVento();
-
-                boolean localizador = dadosMetereologicosRepository.findClimaAtivoByCidadeAndDataAndTuno(cidadeUpdate, dataUpdate, turnoUpdate);
-                if (localizador) {
-                    if (
-                            !cidadeUpdate.equals(cidade) ||
-                            !dataUpdate.equals(data) ||
-                            !turnoUpdate.equals(turno)
-                    ) {
-                        throw new ValidacaoException("Já existe um evento cadastrado nessa data");
-                    }
-                }
 
                 existingDadosMetereologicos.setCidade(cidadeUpdate);
                 existingDadosMetereologicos.setData(dataUpdate);

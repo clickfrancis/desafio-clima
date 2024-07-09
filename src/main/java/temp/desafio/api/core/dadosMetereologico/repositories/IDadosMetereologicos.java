@@ -15,10 +15,5 @@ public interface IDadosMetereologicos {
 
     void deleteDadosMeterologicos(String cidade, LocalDate data, TipoTurno turno);
 
-    DadosMetereologicosDTO updateDadosMeterologicos(
-            String cidade,
-            LocalDate data,
-            TipoTurno turno,
-            DadosMetereologicosDTO dadosMetereologicosDTO
-    );
+    DadosMetereologicosDTO updateDadosMeterologicos(DadosMetereologicosDTO dadosMetereologicosDTO);
 }
