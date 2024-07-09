@@ -18,11 +18,9 @@ import java.util.List;
 
 @RestController
 @RequestMapping({"/dados-metereologicos"})
-@AllArgsConstructor
 public class DadosMetereologicosApi {
 
-    @Autowired
-    private final DadosMetereologicosService dadosMetereologicosService;
+    private final DadosMetereologicosService dadosMetereologicosService = new DadosMetereologicosService();
 
     @PostMapping
     @Transactional
@@ -38,6 +36,7 @@ public class DadosMetereologicosApi {
     }
 
     @PutMapping("/atualizar-dados-metereologicos/{cidade}/{data}/{turno}")
+    @Transactional
     public ResponseEntity<DadosMetereologicosDTO> updateDadosMetereologicos(
             @PathVariable String cidade,
             @PathVariable @DateTimeFormat(pattern = "d-M-yyyy") String data,
@@ -49,6 +48,7 @@ public class DadosMetereologicosApi {
     }
 
     @DeleteMapping(path = "/{cidade}/{data}/{turno}")
+    @Transactional
     public ResponseEntity<HttpStatus> delete(
             @PathVariable String cidade,
             @PathVariable @DateTimeFormat(pattern = "d-M-yyyy") String data,

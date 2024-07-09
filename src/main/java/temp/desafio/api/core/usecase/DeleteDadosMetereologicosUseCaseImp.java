@@ -1,13 +1,11 @@
 package temp.desafio.api.core.usecase;
 
-import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import temp.desafio.api.core.enums.TipoTurno;
 import temp.desafio.api.core.exceptions.ValidacaoException;
 import java.time.LocalDate;
 
 @Component
-@RequiredArgsConstructor
 public class DeleteDadosMetereologicosUseCaseImp implements DeleteDadosMetereologicosUseCase {
 
     @Override

@@ -27,17 +27,13 @@ public class DadosMetereologicosService implements IDadosMetereologicos {
     @Autowired
     private DadosMetereologicosRepository dadosMetereologicosRepository;
 
-    @Autowired
-    private DadosMetereologicosEntityMapper entityMapper;
+    private final DadosMetereologicosEntityMapper entityMapper = new DadosMetereologicosEntityMapper();
 
-    @Autowired
-    private CreateDadosMetereologicosUseCaseImp createDadosMetereologicosUseCase;
+    private final CreateDadosMetereologicosUseCaseImp createDadosMetereologicosUseCase = new CreateDadosMetereologicosUseCaseImp();
 
-    @Autowired
-    private UpdateDadosMetereologicosUseCaseImp updateDadosMetereologicosUseCaseImp;
+    private final UpdateDadosMetereologicosUseCaseImp updateDadosMetereologicosUseCaseImp = new UpdateDadosMetereologicosUseCaseImp();
 
-    @Autowired
-    private DeleteDadosMetereologicosUseCaseImp deleteDadosMetereologicosUseCase;
+    private final DeleteDadosMetereologicosUseCaseImp deleteDadosMetereologicosUseCase = new DeleteDadosMetereologicosUseCaseImp();
 
     @Override
     public DadosMetereologicosDTO createDadosMetereologicos(DadosMetereologicosDTO dadosMetereologicosDTO){
