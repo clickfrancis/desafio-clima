@@ -1,8 +1,6 @@
 package temp.desafio.api.infrastructure.controller;
 
 import jakarta.transaction.Transactional;
-import lombok.AllArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -35,7 +33,7 @@ public class DadosMetereologicosApi {
         return ResponseEntity.status(HttpStatus.OK).body(dadosMetereologicoDTOS);
     }
 
-    @PutMapping("/atualizar-dados-metereologicos/{cidade}/{data}/{turno}")
+    @PutMapping
     @Transactional
     public ResponseEntity<DadosMetereologicosDTO> updateDadosMetereologicos(
             @PathVariable String cidade,
