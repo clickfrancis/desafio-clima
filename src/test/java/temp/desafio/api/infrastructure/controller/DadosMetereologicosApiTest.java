@@ -13,11 +13,11 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
-import temp.desafio.api.core.dadosMetereologico.dto.DadosMetereologicos;
+import temp.desafio.api.core.dadosMetereologico.dto.DadosMetereologicosDTO;
 import temp.desafio.api.core.enums.TipoClima;
 import temp.desafio.api.core.enums.TipoTurno;
 import temp.desafio.api.core.exceptions.ValidacaoException;
-import temp.desafio.api.infrastructure.persistence.entity.DadosMetereologicosEntity;
+import temp.desafio.api.infrastructure.persistence.entity.DadosMetereologicos;
 import temp.desafio.api.infrastructure.persistence.repositories.DadosMetereologicosRepository;
 
 import java.time.LocalDate;
@@ -34,17 +34,17 @@ public class DadosMetereologicosApiTest {
     ObjectMapper mapper;
 
     @Autowired
-    JacksonTester<DadosMetereologicos> dadosMetereologicosJson;
+    JacksonTester<DadosMetereologicosDTO> dadosMetereologicosJson;
 
     @Autowired
     DadosMetereologicosRepository dadosMetereologicosRepository;
 
     @MockBean
-    DadosMetereologicos dadosMetereologicos;
+    DadosMetereologicosDTO dadosMetereologicosDTO;
 
     @BeforeEach
     public void setUp() {
-        DadosMetereologicosEntity dadosMetereolicosEntity = new DadosMetereologicosEntity();
+        DadosMetereologicos dadosMetereolicosEntity = new DadosMetereologicos();
         dadosMetereolicosEntity.setCidade("Salvador");
         dadosMetereolicosEntity.setData(LocalDate.of(2024, 7,2));
         dadosMetereolicosEntity.setTempMin("");
@@ -67,7 +67,7 @@ public class DadosMetereologicosApiTest {
     void criarEventoClimatico() throws Exception {
 
         String dadosMetereologicosRequest = mapper.writeValueAsString(
-                new DadosMetereologicos(
+                new DadosMetereologicosDTO(
                         "Salvador",
                         LocalDate.of(2024,7,3),
                         "28°",
@@ -93,7 +93,7 @@ public class DadosMetereologicosApiTest {
     void negarCriacaoEventoClimatico() throws Exception {
 
         String dadosMetereologicosRequest = mapper.writeValueAsString(
-                new DadosMetereologicos(
+                new DadosMetereologicosDTO(
                         "Salvador",
                         LocalDate.of(2024,7,2),
                         "28°",
@@ -129,7 +129,7 @@ public class DadosMetereologicosApiTest {
     public void atualizarEventosClimaticos() throws Exception {
 
         String dadosMetereologicosRequest = mapper.writeValueAsString(
-                new DadosMetereologicos(
+                new DadosMetereologicosDTO(
                         "Salvador",
                         LocalDate.of(2024,7,2),
                         "28°",

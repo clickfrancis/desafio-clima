@@ -3,7 +3,7 @@ package temp.desafio.api.infrastructure.service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import temp.desafio.api.core.dadosMetereologico.dto.DadosMetereologicos;
+import temp.desafio.api.core.dadosMetereologico.dto.DadosMetereologicosDTO;
 import temp.desafio.api.core.dadosMetereologico.repositories.IDadosMetereologicos;
 import temp.desafio.api.core.enums.TipoClima;
 import temp.desafio.api.core.enums.TipoTurno;
@@ -12,7 +12,7 @@ import temp.desafio.api.core.usecase.CreateDadosMetereologicosUseCaseImp;
 import temp.desafio.api.core.usecase.DeleteDadosMetereologicosUseCaseImp;
 import temp.desafio.api.core.usecase.UpdateDadosMetereologicosUseCaseImp;
 import temp.desafio.api.infrastructure.mappers.DadosMetereologicosEntityMapper;
-import temp.desafio.api.infrastructure.persistence.entity.DadosMetereologicosEntity;
+import temp.desafio.api.infrastructure.persistence.entity.DadosMetereologicos;
 import temp.desafio.api.infrastructure.persistence.repositories.DadosMetereologicosRepository;
 
 import java.time.LocalDate;
@@ -40,64 +40,64 @@ public class DadosMetereologicosService implements IDadosMetereologicos {
     private DeleteDadosMetereologicosUseCaseImp deleteDadosMetereologicosUseCase;
 
     @Override
-    public DadosMetereologicos createDadosMetereologicos(DadosMetereologicos dadosMetereologicos){
-        DadosMetereologicosEntity dadosMetereologicosEntity = entityMapper.toDadosMetereologicosEntity(dadosMetereologicos);
-        createDadosMetereologicosUseCase.execute(dadosMetereologicos);
-        DadosMetereologicosEntity dadosMetereologicosEntitySaveEntity = dadosMetereologicosRepository.save(dadosMetereologicosEntity);
-        return entityMapper.toDadosMetereologicos(dadosMetereologicosEntitySaveEntity);
+    public DadosMetereologicosDTO createDadosMetereologicos(DadosMetereologicosDTO dadosMetereologicosDTO){
+        DadosMetereologicos dadosMetereologicos = entityMapper.toDadosMetereologicos(dadosMetereologicosDTO);
+        createDadosMetereologicosUseCase.execute(dadosMetereologicosDTO);
+        DadosMetereologicos dadosMetereologicosEntitySave = dadosMetereologicosRepository.save(dadosMetereologicos);
+        return entityMapper.toDadosMetereologicosDTO(dadosMetereologicosEntitySave);
     }
 
     @Override
-    public DadosMetereologicos findByCidade(String cidade) {
-        Optional<DadosMetereologicosEntity> dadosMetereologicosEntity = dadosMetereologicosRepository.findByCidade(cidade);
-        return dadosMetereologicosEntity.map(entityMapper::toDadosMetereologicos).orElse(null);
+    public DadosMetereologicosDTO findByCidade(String cidade) {
+        Optional<DadosMetereologicos> dadosMetereologicosEntity = dadosMetereologicosRepository.findByCidade(cidade);
+        return dadosMetereologicosEntity.map(entityMapper::toDadosMetereologicosDTO).orElse(null);
     }
 
     @Override
-    public List<DadosMetereologicos> getAllDadosMetereologicos() {
+    public List<DadosMetereologicosDTO> getAllDadosMetereologicos() {
         return dadosMetereologicosRepository
                 .findAll()
                 .stream()
-                .map(entityMapper::toDadosMetereologicos)
+                .map(entityMapper::toDadosMetereologicosDTO)
                 .collect(Collectors.toList());
     }
 
     @Override
     public void deleteDadosMeterologicos(String cidade, LocalDate data, TipoTurno turno) {
         deleteDadosMetereologicosUseCase.execute(cidade, data, turno);
-        Optional<DadosMetereologicosEntity> optionalDadosMetereologicosEntity =
+        Optional<DadosMetereologicos> optionalDadosMetereologicosEntity =
                 dadosMetereologicosRepository.findByCidadeAndDataAndTurno(cidade, data, turno);
         if (optionalDadosMetereologicosEntity.isPresent()){
-            DadosMetereologicosEntity dadosMetereologicosEntity = optionalDadosMetereologicosEntity.get();
-            dadosMetereologicosRepository.delete(dadosMetereologicosEntity);
+            DadosMetereologicos dadosMetereologicos = optionalDadosMetereologicosEntity.get();
+            dadosMetereologicosRepository.delete(dadosMetereologicos);
         } else {
             throw new ValidacaoException("Evento climático não encontrado");
         }
     }
 
     @Override
-    public DadosMetereologicos updateDadosMeterologicos(
+    public DadosMetereologicosDTO updateDadosMeterologicos(
             String cidade,
             LocalDate data,
             TipoTurno turno,
-            DadosMetereologicos dadosMetereologicos) {
+            DadosMetereologicosDTO dadosMetereologicosDTO) {
 
-            Optional<DadosMetereologicosEntity> dadosMetereologicosEntity = dadosMetereologicosRepository.findByCidadeAndDataAndTurno(cidade,data,turno);
+            Optional<DadosMetereologicos> dadosMetereologicosEntity = dadosMetereologicosRepository.findByCidadeAndDataAndTurno(cidade,data,turno);
 
-            updateDadosMetereologicosUseCaseImp.execute(dadosMetereologicos);
+            updateDadosMetereologicosUseCaseImp.execute(dadosMetereologicosDTO);
 
             if (dadosMetereologicosEntity.isPresent()) {
-                DadosMetereologicosEntity existingDadosMetereologicosEntity = dadosMetereologicosEntity.get();
+                DadosMetereologicos existingDadosMetereologicos = dadosMetereologicosEntity.get();
 
-                String cidadeUpdate = dadosMetereologicos.cidade() == null ? existingDadosMetereologicosEntity.getCidade() : dadosMetereologicos.cidade();
-                LocalDate dataUpdate = dadosMetereologicos.data() == null ? existingDadosMetereologicosEntity.getData() : dadosMetereologicos.data();
-                TipoTurno turnoUpdate = dadosMetereologicos.turno() == null ? existingDadosMetereologicosEntity.getTurno() : dadosMetereologicos.turno();
-                String tempMinUpdate = dadosMetereologicos.tempMin() == null ? existingDadosMetereologicosEntity.getTempMin() : dadosMetereologicos.tempMin();
-                String tempMaxUpdate = dadosMetereologicos.tempMax() == null ? existingDadosMetereologicosEntity.getTempMax() : dadosMetereologicos.tempMax();
-                TipoClima climaUpdate = dadosMetereologicos.clima() == null ? existingDadosMetereologicosEntity.getClima() : dadosMetereologicos.clima();
-                String precipitacaoUpdate = dadosMetereologicos.precipitacao() == null ? existingDadosMetereologicosEntity.getPrecipitacao() : dadosMetereologicos.precipitacao();
-                String umidadeUpdate = dadosMetereologicos.umidade() == null ? existingDadosMetereologicosEntity.getUmidade() : dadosMetereologicos.umidade();
-                String velDoVentoUpdate = dadosMetereologicos.velDoVento() == null ? existingDadosMetereologicosEntity.getVelDoVento() : dadosMetereologicos.velDoVento();
+                String cidadeUpdate = dadosMetereologicosDTO.cidade() == null ? existingDadosMetereologicos.getCidade() : dadosMetereologicosDTO.cidade();
+                LocalDate dataUpdate = dadosMetereologicosDTO.data() == null ? existingDadosMetereologicos.getData() : dadosMetereologicosDTO.data();
+                TipoTurno turnoUpdate = dadosMetereologicosDTO.turno() == null ? existingDadosMetereologicos.getTurno() : dadosMetereologicosDTO.turno();
+                String tempMinUpdate = dadosMetereologicosDTO.tempMin() == null ? existingDadosMetereologicos.getTempMin() : dadosMetereologicosDTO.tempMin();
+                String tempMaxUpdate = dadosMetereologicosDTO.tempMax() == null ? existingDadosMetereologicos.getTempMax() : dadosMetereologicosDTO.tempMax();
+                TipoClima climaUpdate = dadosMetereologicosDTO.clima() == null ? existingDadosMetereologicos.getClima() : dadosMetereologicosDTO.clima();
+                String precipitacaoUpdate = dadosMetereologicosDTO.precipitacao() == null ? existingDadosMetereologicos.getPrecipitacao() : dadosMetereologicosDTO.precipitacao();
+                String umidadeUpdate = dadosMetereologicosDTO.umidade() == null ? existingDadosMetereologicos.getUmidade() : dadosMetereologicosDTO.umidade();
+                String velDoVentoUpdate = dadosMetereologicosDTO.velDoVento() == null ? existingDadosMetereologicos.getVelDoVento() : dadosMetereologicosDTO.velDoVento();
 
                 boolean localizador = dadosMetereologicosRepository.findClimaAtivoByCidadeAndDataAndTuno(cidadeUpdate, dataUpdate, turnoUpdate);
                 if (localizador) {
@@ -110,18 +110,18 @@ public class DadosMetereologicosService implements IDadosMetereologicos {
                     }
                 }
 
-                existingDadosMetereologicosEntity.setCidade(cidadeUpdate);
-                existingDadosMetereologicosEntity.setData(dataUpdate);
-                existingDadosMetereologicosEntity.setTurno(turnoUpdate);
-                existingDadosMetereologicosEntity.setTempMin(tempMinUpdate);
-                existingDadosMetereologicosEntity.setTempMax(tempMaxUpdate);
-                existingDadosMetereologicosEntity.setClima(climaUpdate);
-                existingDadosMetereologicosEntity.setPrecipitacao(precipitacaoUpdate);
-                existingDadosMetereologicosEntity.setUmidade(umidadeUpdate);
-                existingDadosMetereologicosEntity.setVelDoVento(velDoVentoUpdate);
+                existingDadosMetereologicos.setCidade(cidadeUpdate);
+                existingDadosMetereologicos.setData(dataUpdate);
+                existingDadosMetereologicos.setTurno(turnoUpdate);
+                existingDadosMetereologicos.setTempMin(tempMinUpdate);
+                existingDadosMetereologicos.setTempMax(tempMaxUpdate);
+                existingDadosMetereologicos.setClima(climaUpdate);
+                existingDadosMetereologicos.setPrecipitacao(precipitacaoUpdate);
+                existingDadosMetereologicos.setUmidade(umidadeUpdate);
+                existingDadosMetereologicos.setVelDoVento(velDoVentoUpdate);
 
-                DadosMetereologicosEntity dadosMetereologicosEntitySaved = dadosMetereologicosRepository.save(existingDadosMetereologicosEntity);
-                return entityMapper.toDadosMetereologicos(dadosMetereologicosEntitySaved);
+                DadosMetereologicos dadosMetereologicosSaved = dadosMetereologicosRepository.save(existingDadosMetereologicos);
+                return entityMapper.toDadosMetereologicosDTO(dadosMetereologicosSaved);
             } else {
                 throw new ValidacaoException("Evento climático não localizado.");
             }

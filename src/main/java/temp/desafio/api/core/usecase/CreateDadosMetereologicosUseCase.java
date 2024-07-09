@@ -1,8 +1,8 @@
 package temp.desafio.api.core.usecase;
 
-import temp.desafio.api.core.dadosMetereologico.dto.DadosMetereologicos;
+import temp.desafio.api.core.dadosMetereologico.dto.DadosMetereologicosDTO;
 
 public interface CreateDadosMetereologicosUseCase {
 
-    DadosMetereologicos execute(DadosMetereologicos dadosMetereologicos);
+    DadosMetereologicosDTO execute(DadosMetereologicosDTO dadosMetereologicosDTO);
 }

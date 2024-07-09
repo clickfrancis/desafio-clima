@@ -3,18 +3,15 @@ package temp.desafio.api.infrastructure.controller;
 import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import temp.desafio.api.core.dadosMetereologico.dto.DadosMetereologicos;
+import temp.desafio.api.core.dadosMetereologico.dto.DadosMetereologicosDTO;
 import temp.desafio.api.core.enums.TipoTurno;
 import temp.desafio.api.infrastructure.service.DadosMetereologicosService;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 
@@ -29,26 +26,26 @@ public class DadosMetereologicosApi {
 
     @PostMapping
     @Transactional
-    public ResponseEntity<DadosMetereologicos> createDadosMetereologicos(@RequestBody DadosMetereologicos dadosMetereologicos) {
-        DadosMetereologicos createdDadosMetereologicos = dadosMetereologicosService.createDadosMetereologicos(dadosMetereologicos);
+    public ResponseEntity<DadosMetereologicosDTO> createDadosMetereologicos(@RequestBody DadosMetereologicosDTO dadosMetereologicosDTO) {
+        DadosMetereologicosDTO createdDadosMetereologicos = dadosMetereologicosService.createDadosMetereologicos(dadosMetereologicosDTO);
         return ResponseEntity.status(HttpStatus.CREATED).body(createdDadosMetereologicos);
     }
 
     @GetMapping
-    public ResponseEntity<List<DadosMetereologicos>> getAllDadosMetereologicos(){
-        List<DadosMetereologicos> dadosMetereologicos = dadosMetereologicosService.getAllDadosMetereologicos();
-        return ResponseEntity.status(HttpStatus.OK).body(dadosMetereologicos);
+    public ResponseEntity<List<DadosMetereologicosDTO>> getAllDadosMetereologicos(){
+        List<DadosMetereologicosDTO> dadosMetereologicoDTOS = dadosMetereologicosService.getAllDadosMetereologicos();
+        return ResponseEntity.status(HttpStatus.OK).body(dadosMetereologicoDTOS);
     }
 
     @PutMapping("/atualizar-dados-metereologicos/{cidade}/{data}/{turno}")
-    public ResponseEntity<DadosMetereologicos> updateDadosMetereologicos(
+    public ResponseEntity<DadosMetereologicosDTO> updateDadosMetereologicos(
             @PathVariable String cidade,
             @PathVariable @DateTimeFormat(pattern = "d-M-yyyy") String data,
             @PathVariable TipoTurno turno,
-            @RequestBody DadosMetereologicos dadosMetereologicos) {
+            @RequestBody DadosMetereologicosDTO dadosMetereologicosDTO) {
         LocalDate localDate = LocalDate.parse(data, DateTimeFormatter.ofPattern("d-M-yyyy"));
-        dadosMetereologicosService.updateDadosMeterologicos(cidade, localDate, turno, dadosMetereologicos);
-        return ResponseEntity.status(HttpStatus.OK).body(dadosMetereologicos);
+        dadosMetereologicosService.updateDadosMeterologicos(cidade, localDate, turno, dadosMetereologicosDTO);
+        return ResponseEntity.status(HttpStatus.OK).body(dadosMetereologicosDTO);
     }
 
     @DeleteMapping(path = "/{cidade}/{data}/{turno}")

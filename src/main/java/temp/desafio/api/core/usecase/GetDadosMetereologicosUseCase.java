@@ -1,11 +1,11 @@
 package temp.desafio.api.core.usecase;
 
-import temp.desafio.api.core.dadosMetereologico.dto.DadosMetereologicos;
+import temp.desafio.api.core.dadosMetereologico.dto.DadosMetereologicosDTO;
 import java.util.List;
 
 public interface GetDadosMetereologicosUseCase {
 
-    List<DadosMetereologicos> execute();
+    List<DadosMetereologicosDTO> execute();
 
-    DadosMetereologicos executeByCity(String cidade);
+    DadosMetereologicosDTO executeByCity(String cidade);
 }

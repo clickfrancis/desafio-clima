@@ -13,7 +13,7 @@ import java.time.LocalDate;
 @NoArgsConstructor
 @Data
 @EqualsAndHashCode(of = "id")
-public class DadosMetereologicosEntity {
+public class DadosMetereologicos {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
