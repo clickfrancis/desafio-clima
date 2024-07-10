@@ -74,43 +74,6 @@ public class DadosMetereologicosService implements IDadosMetereologicos {
     @Override
     public DadosMetereologicosDTO updateDadosMeterologicos(DadosMetereologicosDTO dadosMetereologicosDTO) {
 
-        updateDadosMetereologicosUseCaseImp.execute(dadosMetereologicosDTO);
-
-        Optional<DadosMetereologicos> dadosMetereologicosEntity =
-                dadosMetereologicosRepository.findByCidadeAndDataAndTurno(
-                    dadosMetereologicosDTO.cidade(),
-                    dadosMetereologicosDTO.data(),
-                    dadosMetereologicosDTO.turno()
-                );
-
-        if (dadosMetereologicosEntity.isPresent()) {
-
-                DadosMetereologicos existingDadosMetereologicos = dadosMetereologicosEntity.get();
-
-                String cidadeUpdate = dadosMetereologicosDTO.cidade() == null ? existingDadosMetereologicos.getCidade() : dadosMetereologicosDTO.cidade();
-                LocalDate dataUpdate = dadosMetereologicosDTO.data() == null ? existingDadosMetereologicos.getData() : dadosMetereologicosDTO.data();
-                TipoTurno turnoUpdate = dadosMetereologicosDTO.turno() == null ? existingDadosMetereologicos.getTurno() : dadosMetereologicosDTO.turno();
-                String tempMinUpdate = dadosMetereologicosDTO.tempMin() == null ? existingDadosMetereologicos.getTempMin() : dadosMetereologicosDTO.tempMin();
-                String tempMaxUpdate = dadosMetereologicosDTO.tempMax() == null ? existingDadosMetereologicos.getTempMax() : dadosMetereologicosDTO.tempMax();
-                TipoClima climaUpdate = dadosMetereologicosDTO.clima() == null ? existingDadosMetereologicos.getClima() : dadosMetereologicosDTO.clima();
-                String precipitacaoUpdate = dadosMetereologicosDTO.precipitacao() == null ? existingDadosMetereologicos.getPrecipitacao() : dadosMetereologicosDTO.precipitacao();
-                String umidadeUpdate = dadosMetereologicosDTO.umidade() == null ? existingDadosMetereologicos.getUmidade() : dadosMetereologicosDTO.umidade();
-                String velDoVentoUpdate = dadosMetereologicosDTO.velDoVento() == null ? existingDadosMetereologicos.getVelDoVento() : dadosMetereologicosDTO.velDoVento();
-
-                existingDadosMetereologicos.setCidade(cidadeUpdate);
-                existingDadosMetereologicos.setData(dataUpdate);
-                existingDadosMetereologicos.setTurno(turnoUpdate);
-                existingDadosMetereologicos.setTempMin(tempMinUpdate);
-                existingDadosMetereologicos.setTempMax(tempMaxUpdate);
-                existingDadosMetereologicos.setClima(climaUpdate);
-                existingDadosMetereologicos.setPrecipitacao(precipitacaoUpdate);
-                existingDadosMetereologicos.setUmidade(umidadeUpdate);
-                existingDadosMetereologicos.setVelDoVento(velDoVentoUpdate);
-
-                DadosMetereologicos dadosMetereologicosSaved = dadosMetereologicosRepository.save(existingDadosMetereologicos);
-                return entityMapper.toDadosMetereologicosDTO(dadosMetereologicosSaved);
-            } else {
-                throw new ValidacaoException("Evento climático não localizado.");
-            }
+        return updateDadosMetereologicosUseCaseImp.execute(dadosMetereologicosDTO);
     }
 }
