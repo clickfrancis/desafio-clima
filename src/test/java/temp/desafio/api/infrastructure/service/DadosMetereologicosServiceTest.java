@@ -9,6 +9,11 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import temp.desafio.api.core.dadosMetereologico.dto.DadosMetereologicosDTO;
 import temp.desafio.api.core.enums.TipoTurno;
+import temp.desafio.api.core.exceptions.ValidacaoException;
+import temp.desafio.api.core.usecase.CreateDadosMetereologicosUseCaseImp;
+import temp.desafio.api.core.usecase.DeleteDadosMetereologicosUseCaseImp;
+import temp.desafio.api.core.usecase.UpdateDadosMetereologicosUseCaseImp;
+import temp.desafio.api.fixture.DadosMetereologicosDTOFixture;
 import temp.desafio.api.infrastructure.mappers.DadosMetereologicosEntityMapper;
 import temp.desafio.api.infrastructure.persistence.entity.DadosMetereologicos;
 import temp.desafio.api.infrastructure.persistence.repositories.DadosMetereologicosRepository;
@@ -33,12 +38,29 @@ public class DadosMetereologicosServiceTest {
     @Mock
     DadosMetereologicosEntityMapper entityMapper;
 
+    @Mock
+    private CreateDadosMetereologicosUseCaseImp createDadosMetereologicos;
+
+    @Mock
+    private UpdateDadosMetereologicosUseCaseImp updateDadosMetereologicos;
+
+    @Mock
+    private DeleteDadosMetereologicosUseCaseImp deleteDadosMetereologicosUseCase;
+
+    DadosMetereologicosDTO dadosMetereologicosCamposNull;
+
+    DadosMetereologicosDTO dadosMetereoloicosExistente;
+
     DadosMetereologicosDTO dadosMetereologicosDTO;
 
     DadosMetereologicos dadosMetereologicos;
 
     @BeforeEach
     public void setUp() {
+
+        this.dadosMetereologicosCamposNull = DadosMetereologicosDTOFixture.createDadosMetereologicosDTONull();
+        this.dadosMetereoloicosExistente = DadosMetereologicosDTOFixture.createDadosMetereologicosDTOExistente();
+
         dadosMetereologicosDTO = new DadosMetereologicosDTO(
                 "Salvador",
                 LocalDate.now(),
@@ -56,97 +78,92 @@ public class DadosMetereologicosServiceTest {
 
     @Test
     @DisplayName("Esperado que cadastre os dados metereologicos com sucesso")
-    void deveCadastrarDadosMetereologicos() {
+    void deveCadastrarDadosMetereologicosComSucesso() {
 
-        when(entityMapper.toDadosMetereologicosEntity(dadosMetereologicosDTO)).thenReturn(dadosMetereologicos);
+        when(entityMapper.toDadosMetereologicos(dadosMetereologicosDTO)).thenReturn(dadosMetereologicos);
         when(dadosMetereologicosRepository.save(dadosMetereologicos)).thenReturn(dadosMetereologicos);
-        when(entityMapper.toDadosMetereologicos(dadosMetereologicos)).thenReturn(dadosMetereologicosDTO);
+        when(entityMapper.toDadosMetereologicosDTO(dadosMetereologicos)).thenReturn(dadosMetereologicosDTO);
 
         DadosMetereologicosDTO result = dadosMetereologicosService.createDadosMetereologicos(dadosMetereologicosDTO);
 
         assertNotNull(result);
         assertEquals(dadosMetereologicosDTO, result);
 
-        verify(entityMapper).toDadosMetereologicosEntity(dadosMetereologicosDTO);
+        verify(entityMapper).toDadosMetereologicos(dadosMetereologicosDTO);
         verify(dadosMetereologicosRepository).save(dadosMetereologicos);
-        verify(entityMapper).toDadosMetereologicos(dadosMetereologicos);
+        verify(entityMapper).toDadosMetereologicos(dadosMetereologicosDTO);
+    }
+
+    @Test
+    @DisplayName("Esperado que não cadastre os dados metereologicos por campos vazios")
+    public void naoDeveCadastrarDadosMetereologicosPorCamposVazios() {
+
+        when(createDadosMetereologicos.execute(dadosMetereologicosCamposNull))
+                .thenThrow(new ValidacaoException(""));
+
+        assertThrows(ValidacaoException.class, () -> {
+            dadosMetereologicosService.createDadosMetereologicos(dadosMetereologicosCamposNull);
+        });
+    }
+
+    @Test
+    @DisplayName("Esperado que aconteça erro por não permitir eventos iguais")
+    public void naoDeveCadastrarDadosMetereologicosIguais() {
+
+        when(entityMapper.toDadosMetereologicos(dadosMetereoloicosExistente)).thenReturn(dadosMetereologicos);
+
+        when(createDadosMetereologicos.execute(dadosMetereoloicosExistente))
+                .thenThrow(new ValidacaoException(""));
+
+        assertThrows(ValidacaoException.class, () -> dadosMetereologicosService.createDadosMetereologicos(dadosMetereoloicosExistente));
     }
 
     @Test
     @DisplayName("Esperado que busque dados metereologicos por cidade")
     void deveBuscarPorCidade() {
-        when(dadosMetereologicosRepository.findByCidade(dadosMetereologicosDTO.cidade())).thenReturn(Optional.of(dadosMetereologicos));
-        when(entityMapper.toDadosMetereologicos(dadosMetereologicos)).thenReturn(dadosMetereologicosDTO);
+        when(dadosMetereologicosRepository.findByCidade(dadosMetereologicosDTO.cidade()))
+                .thenReturn(Optional.of(dadosMetereologicos));
+        when(entityMapper.toDadosMetereologicosDTO(dadosMetereologicos)).thenReturn(dadosMetereologicosDTO);
 
         DadosMetereologicosDTO result = dadosMetereologicosService.findByCidade(dadosMetereologicosDTO.cidade());
 
-        assertNotNull(result);
         assertEquals(dadosMetereologicosDTO, result);
 
         verify(dadosMetereologicosRepository).findByCidade(dadosMetereologicosDTO.cidade());
-        verify(entityMapper).toDadosMetereologicos(dadosMetereologicos);
+        verify(entityMapper).toDadosMetereologicosDTO(dadosMetereologicos);
     }
 
     @Test
     @DisplayName("Esperado que liste dados metereologicos com sucesso")
     public void deveEncontrarTodosOsDadosMetereologicosComSucesso() {
         when(dadosMetereologicosRepository.findAll()).thenReturn(Collections.singletonList(dadosMetereologicos));
-        when(entityMapper.toDadosMetereologicos(dadosMetereologicos)).thenReturn(dadosMetereologicosDTO);
+        when(entityMapper.toDadosMetereologicosDTO(dadosMetereologicos)).thenReturn(dadosMetereologicosDTO);
 
         List<DadosMetereologicosDTO> result = dadosMetereologicosService.getAllDadosMetereologicos();
 
         assertNotNull(result);
 
         verify(dadosMetereologicosRepository).findAll();
-        verify(entityMapper).toDadosMetereologicos(dadosMetereologicos);
     }
 
     @Test
     @DisplayName("Esperado que atualize dados metereologicos com sucesso")
     public void deveAtualizarDadosMetereologicosComSucesso() {
 
-        when(dadosMetereologicosRepository.findByCidadeAndDataAndTurno(
-                dadosMetereologicosDTO.cidade(), dadosMetereologicosDTO.data(), dadosMetereologicosDTO.turno())
-        ).thenReturn(Optional.of(dadosMetereologicos));
-        when(dadosMetereologicosRepository.save(dadosMetereologicos)).thenReturn(dadosMetereologicos);
-        when(entityMapper.toDadosMetereologicos(dadosMetereologicos)).thenReturn(dadosMetereologicosDTO);
+        when(updateDadosMetereologicos.execute(dadosMetereologicosDTO)).thenReturn(dadosMetereologicosDTO);
 
-        DadosMetereologicosDTO result = dadosMetereologicosService.updateDadosMeterologicos(
-                dadosMetereologicosDTO.cidade(), dadosMetereologicosDTO.data(), dadosMetereologicosDTO.turno(), dadosMetereologicosDTO);
+        DadosMetereologicosDTO result = dadosMetereologicosService.updateDadosMeterologicos(dadosMetereologicosDTO);
 
         assertNotNull(result);
         assertEquals(dadosMetereologicosDTO, result);
-
-        verify(dadosMetereologicosRepository).findByCidadeAndDataAndTurno(
-                dadosMetereologicosDTO.cidade(),
-                dadosMetereologicosDTO.data(),
-                dadosMetereologicosDTO.turno());
-        verify(dadosMetereologicosRepository).save(dadosMetereologicos);
-        verify(entityMapper).toDadosMetereologicos(dadosMetereologicos);
-        verifyNoMoreInteractions(dadosMetereologicosRepository);
     }
 
     @Test
     @DisplayName("Esperado que não atualize os dados metereologicos")
-    public void naoDeveAtualizarDadosMetereologicos() {
-        when(dadosMetereologicosRepository.findByCidadeAndDataAndTurno(
-                dadosMetereologicosDTO.cidade(),
-                dadosMetereologicosDTO.data(),
-                null)
-        ).thenReturn(Optional.empty());
+    public void naoDeveAtualizarDadosMetereologicosD() {
+        when(updateDadosMetereologicos.execute(dadosMetereologicosCamposNull))
+                .thenThrow(ValidacaoException.class);
 
-        Exception exception = assertThrows(RuntimeException.class, () -> {
-            dadosMetereologicosService.updateDadosMeterologicos(
-                    dadosMetereologicosDTO.cidade(), dadosMetereologicosDTO.data(), null, dadosMetereologicosDTO);
-        });
-
-        assertEquals("DadosMetereologicos not found for cidade: " + dadosMetereologicosDTO.cidade(), exception.getMessage());
-
-        verify(dadosMetereologicosRepository).findByCidadeAndDataAndTurno(
-                dadosMetereologicosDTO.cidade(),
-                dadosMetereologicosDTO.data(),
-                dadosMetereologicosDTO.turno());
-        verify(dadosMetereologicosRepository, never()).save(any(DadosMetereologicos.class));
-        verify(entityMapper, never()).toDadosMetereologicos(any(DadosMetereologicos.class));
+        assertThrows(ValidacaoException.class, () -> dadosMetereologicosService.updateDadosMeterologicos(dadosMetereologicosCamposNull));
     }
 }

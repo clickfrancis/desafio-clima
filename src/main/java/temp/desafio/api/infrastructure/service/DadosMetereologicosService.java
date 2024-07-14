@@ -1,5 +1,6 @@
 package temp.desafio.api.infrastructure.service;
 
+import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -21,19 +22,28 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
-@RequiredArgsConstructor
 public class DadosMetereologicosService implements IDadosMetereologicos {
 
-    @Autowired
-    private DadosMetereologicosRepository dadosMetereologicosRepository;
+    private final DadosMetereologicosRepository dadosMetereologicosRepository;
+    private final DadosMetereologicosEntityMapper entityMapper;
+    private final CreateDadosMetereologicosUseCaseImp createDadosMetereologicosUseCase;
+    private final UpdateDadosMetereologicosUseCaseImp updateDadosMetereologicosUseCase;
+    private final DeleteDadosMetereologicosUseCaseImp deleteDadosMetereologicosUseCase;
 
-    private final DadosMetereologicosEntityMapper entityMapper = new DadosMetereologicosEntityMapper();
 
-    private final CreateDadosMetereologicosUseCaseImp createDadosMetereologicosUseCase = new CreateDadosMetereologicosUseCaseImp();
-
-    private final UpdateDadosMetereologicosUseCaseImp updateDadosMetereologicosUseCaseImp = new UpdateDadosMetereologicosUseCaseImp();
-
-    private final DeleteDadosMetereologicosUseCaseImp deleteDadosMetereologicosUseCase = new DeleteDadosMetereologicosUseCaseImp();
+    public DadosMetereologicosService(
+            DadosMetereologicosRepository dadosMetereologicosRepository,
+            DadosMetereologicosEntityMapper entityMapper,
+            CreateDadosMetereologicosUseCaseImp createDadosMetereologicosUseCase,
+            UpdateDadosMetereologicosUseCaseImp updateDadosMetereologicosUseCase,
+            DeleteDadosMetereologicosUseCaseImp deleteDadosMetereologicosUseCase
+    ) {
+        this.dadosMetereologicosRepository = dadosMetereologicosRepository;
+        this.entityMapper = entityMapper;
+        this.createDadosMetereologicosUseCase = createDadosMetereologicosUseCase;
+        this.updateDadosMetereologicosUseCase = updateDadosMetereologicosUseCase;
+        this.deleteDadosMetereologicosUseCase = deleteDadosMetereologicosUseCase;
+    }
 
     @Override
     public DadosMetereologicosDTO createDadosMetereologicos(DadosMetereologicosDTO dadosMetereologicosDTO){
@@ -74,6 +84,6 @@ public class DadosMetereologicosService implements IDadosMetereologicos {
     @Override
     public DadosMetereologicosDTO updateDadosMeterologicos(DadosMetereologicosDTO dadosMetereologicosDTO) {
 
-        return updateDadosMetereologicosUseCaseImp.execute(dadosMetereologicosDTO);
+        return updateDadosMetereologicosUseCase.execute(dadosMetereologicosDTO);
     }
 }

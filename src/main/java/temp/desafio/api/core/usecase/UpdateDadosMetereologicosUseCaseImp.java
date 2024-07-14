@@ -25,6 +25,7 @@ public class UpdateDadosMetereologicosUseCaseImp implements UpdateDadosMetereolo
     @Autowired
     private final DadosMetereologicosRepository dadosMetereologicosRepository;
 
+    @Autowired
     private final DadosMetereologicosEntityMapper entityMapper;
 
     @Override

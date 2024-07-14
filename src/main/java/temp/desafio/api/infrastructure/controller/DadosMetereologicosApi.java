@@ -1,6 +1,8 @@
 package temp.desafio.api.infrastructure.controller;
 
 import jakarta.transaction.Transactional;
+import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -16,9 +18,11 @@ import java.util.List;
 
 @RestController
 @RequestMapping({"/dados-metereologicos"})
+@RequiredArgsConstructor
 public class DadosMetereologicosApi {
 
-    private final DadosMetereologicosService dadosMetereologicosService = new DadosMetereologicosService();
+    @Autowired
+    private final DadosMetereologicosService dadosMetereologicosService;
 
     @PostMapping
     @Transactional
